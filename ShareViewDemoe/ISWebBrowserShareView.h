@@ -29,7 +29,10 @@ extern NSString *const kWebBrowserActionColectionViewCell;
 @property (nonatomic, strong) UITapGestureRecognizer *tapGestureRecognizer;
 
 // for subviews
-- (instancetype) initWithTitle:(NSString *) title cancelButtonTitle:(NSString *) cancelButtonTitle shareList:(NSArray *) shareList actionList:(NSArray *) actionList;
+- (instancetype) initWithTitle:(NSString *) title
+             cancelButtonTitle:(NSString *) cancelButtonTitle
+                     shareList:(NSArray *) shareList
+                    actionList:(NSArray *) actionList;
 
 - (instancetype)initWithTitle:(NSString *)title
             cancelButtonTitle:(NSString *)cancelButtonTitle
@@ -46,6 +49,7 @@ extern NSString *const kWebBrowserActionColectionViewCell;
             actionButtonBlock:(void (^)(ISWebBrowserCellType type))actionButtonBlock;
 
 - (void)show;
+
 - (void)hide;
 
 @end

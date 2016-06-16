@@ -27,18 +27,25 @@
 }
 
 - (IBAction)buttonAction:(id)sender {
+    
     NSMutableArray *shareList = [NSMutableArray array];  // , ccTimeLineShareObject, ecard remove cctimeLine share object
     
+    // 微信
     ISWebBrowserShareObject *wxSceneTimelineShareObject = [[ISWebBrowserShareObject alloc] initWithType:ISWebBrowserCellTypeWXSceneTimeline];
     [shareList addObject:wxSceneTimelineShareObject];
 
+    // QQ
     ISWebBrowserShareObject *qqShareObject = [[ISWebBrowserShareObject alloc] initWithType:ISWebBrowserCellTypeQQ];
     [shareList addObject:qqShareObject];
     
+    // 邮件
     ISWebBrowserShareObject *emailShareObject = [[ISWebBrowserShareObject alloc] initWithType:ISWebBrowserCellTypeEmail];
+    
+    // 外部链接
     ISWebBrowserShareObject *copyURLObject = [[ISWebBrowserShareObject alloc] initWithType:ISWebBrowserCellTypeCopyUrl];
     [shareList addObjectsFromArray:@[emailShareObject, copyURLObject]];
     
+    // 分享View
     ISWebBrowserShareView *shareView = [[ISWebBrowserShareView alloc] initWithTitle:nil
                                                                   cancelButtonTitle:NSLocalizedString(@"i_wb_label_share_menu_cancel", @"Cancel") cancelBlock:NULL
                                                                           shareList:shareList
@@ -64,8 +71,11 @@
                                         }
                                                                          actionList:shareList
                                                                   actionButtonBlock:nil];
+    
     [self.view.window addSubview:shareView];
+    
     UIAccessibilityPostNotification(UIAccessibilityScreenChangedNotification, shareView);
+    
     [shareView show];
 }
 @end

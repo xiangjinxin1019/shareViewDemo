@@ -43,6 +43,217 @@ NSString *const kWebBrowserActionColectionViewCell = @"kWebBrowserActionColectio
 @implementation ISWebBrowserShareView
 
 
+
+
+#pragma mark - setting views methods
+
+// setting maskView
+- (void) settingMaskView
+{
+    _maskView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, BROWSER_SCREEN_WIDTH, BROWSER_SCREEN_HEIGHT)];
+    
+    _maskView.backgroundColor = UIColorFromRGBA(0x000000, 0.55);
+    
+    [self addSubview:_maskView];
+    
+    _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hide)];
+    
+    [self.maskView addGestureRecognizer:_tapGestureRecognizer];
+    
+    self.maskView.alpha = 0;
+}
+
+// setting contentView
+- (void) settingContentView
+{
+    _contentView = [[UIView alloc] initWithFrame:CGRectMake(0, BROWSER_SCREEN_HEIGHT, BROWSER_SCREEN_WIDTH, CONTENTVIEW_HEIGHT)];
+    
+    _contentView.backgroundColor = CONTENT_BACKGROUND_COLOR;
+    
+    [self addSubview:_contentView];
+
+}
+
+// setting titleLabel
+- (void) settingTitleLabelWithTitle:(NSString *)title
+{
+    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, TITLELABEL_ORIGIN_Y, BROWSER_SCREEN_WIDTH, TITLELABEL_HEIGHT)];
+    
+    _titleLabel.backgroundColor = CONTENT_BACKGROUND_COLOR;
+    
+    _titleLabel.textAlignment = NSTextAlignmentCenter;
+    
+    _titleLabel.font = [UIFont systemFontOfSize:11];
+    
+    _titleLabel.textColor = GLOBAL_TITLE_COLOR;
+    
+    _titleLabel.numberOfLines = 0;
+    
+    _titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"i_wb_label_share_menu_url_source", @"From %@"), title];
+    
+    [self.contentView addSubview:_titleLabel];
+    
+}
+
+
+// setting shareCollectionView
+- (void) settingShareCollectionViewWithPreviousView:(UIView *)previousView
+{
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    
+    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    
+    _shareCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(previousView.frame)+16, BROWSER_SCREEN_WIDTH, SHARECOLLECTIONVIEW_HEIGHT) collectionViewLayout:layout];
+    
+    _shareCollectionView.delegate = self;
+    
+    _shareCollectionView.dataSource = self;
+    
+    _shareCollectionView.alwaysBounceHorizontal = YES;
+    
+    _shareCollectionView.backgroundColor = CONTENT_BACKGROUND_COLOR;
+    
+    _shareCollectionView.directionalLockEnabled = YES;
+    
+    _shareCollectionView.scrollEnabled = YES;
+    
+    _shareCollectionView.showsHorizontalScrollIndicator = NO;
+    
+    [_shareCollectionView registerClass:[ISWebBrowserShareCollectionViewCell class] forCellWithReuseIdentifier:kWebBrowserShareColectionViewCell];
+    
+    [self.contentView addSubview:_shareCollectionView];
+
+}
+
+// setting lineView
+- (UIView *) settingLineView
+{
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(LEFTSPACE, LINEVIEW_ORIGIN_Y, BROWSER_SCREEN_WIDTH - LEFTSPACE, 1)];
+    
+    lineView.backgroundColor = GLOBAL_LINEVIEW_COLOR;
+    
+    [self.contentView addSubview:lineView];
+    
+    return  lineView;
+
+}
+
+// setting actionCollectionView
+- (void) settingActionCollectionViewWithPreviousView:(UIView *)previousView
+{
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    
+    layout = [[UICollectionViewFlowLayout alloc] init];
+    
+    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    
+    _actionCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(previousView.frame)+16, BROWSER_SCREEN_WIDTH, ACTIONCOLLECTIONVIEW_HEIGHT) collectionViewLayout:layout];
+    
+    _actionCollectionView.delegate = self;
+    
+    _actionCollectionView.dataSource = self;
+    
+    _actionCollectionView.alwaysBounceHorizontal = YES;
+    
+    _actionCollectionView.backgroundColor = CONTENT_BACKGROUND_COLOR;
+    
+    _actionCollectionView.directionalLockEnabled = YES;
+    
+    _actionCollectionView.scrollEnabled = YES;
+    
+    _actionCollectionView.showsHorizontalScrollIndicator = NO;
+    
+    [_actionCollectionView registerClass:[ISWebBrowserShareCollectionViewCell class] forCellWithReuseIdentifier:kWebBrowserActionColectionViewCell];
+    
+    [self.contentView addSubview:_actionCollectionView];
+}
+
+// setting cancelButton
+- (void) settingCancelButtonWithCancelButtonTitle:(NSString *)cancelButtonTitle previousView:(UIView *)previousView
+{
+    _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(previousView.frame)+10, BROWSER_SCREEN_WIDTH, CANCELBUTTON_HEIGHT)];
+    
+    _cancelButton.backgroundColor = CANCELBUTTON_BACKGROUND_COLOR;
+    
+    [_cancelButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
+    
+    [_cancelButton setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
+    
+    [_cancelButton setTitle:cancelButtonTitle forState:UIControlStateNormal];
+    
+    [_cancelButton setTitleColor:CANCELBUTTON_TITLE_COLOR forState:UIControlStateNormal];
+    
+    _cancelButton.titleLabel.font = [UIFont systemFontOfSize:17];
+    
+    [_cancelButton addTarget:self action:@selector(cancelButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.contentView addSubview:_cancelButton];
+
+}
+
+
+#pragma  mark - init method
+- (instancetype) initWithTitle:(NSString *) title
+             cancelButtonTitle:(NSString *) cancelButtonTitle
+                     shareList:(NSArray *) shareList
+                    actionList:(NSArray *) actionList
+{
+    self = [super initWithFrame:CGRectMake(0, 0, BROWSER_SCREEN_WIDTH, BROWSER_SCREEN_HEIGHT)];
+    if (self)
+    {
+        _shareList = shareList;
+        
+        _actionList = actionList;
+        
+        // setting maskView
+        [self settingMaskView];
+        
+        UIView *previousView;
+        
+        // setting contenView
+        [self settingContentView];
+
+        if (title.length > 0) {
+            
+            // setting titleLabel
+            [self settingTitleLabelWithTitle:title];
+            
+            previousView = _titleLabel;
+        }
+
+        if (_shareList) {
+            
+            // setting shareCollectionView
+            [self settingShareCollectionViewWithPreviousView:previousView];
+
+            previousView = _shareCollectionView;
+        }
+        
+        if (_shareList.count > 0 && _actionList.count > 0) {
+            
+            // setting lineView
+            UIView *lineView = [self settingLineView];
+            
+            previousView = lineView;
+        }
+
+        if (_actionList.count > 0) {
+            
+            // setting actionCollectionView
+            [self settingActionCollectionViewWithPreviousView:previousView];
+            
+            previousView = _actionCollectionView;
+        }
+
+        // setting cancelButton
+        [self settingCancelButtonWithCancelButtonTitle:cancelButtonTitle previousView:previousView];
+        
+        self.contentView.frame = CGRectMake(0, BROWSER_SCREEN_HEIGHT, BROWSER_SCREEN_WIDTH, CGRectGetMaxY(_cancelButton.frame));
+    }
+    
+    return self;
+}
+
 - (instancetype) initWithTitle:(NSString *) title
              cancelButtonTitle:(NSString *) cancelButtonTitle
                    cancelBlock:(void (^)(void)) cancelBlock
@@ -72,104 +283,12 @@ NSString *const kWebBrowserActionColectionViewCell = @"kWebBrowserActionColectio
     return self;
 }
 
-- (instancetype) initWithTitle:(NSString *) title cancelButtonTitle:(NSString *) cancelButtonTitle shareList:(NSArray *) shareList actionList:(NSArray *) actionList
-{
-    self = [super initWithFrame:CGRectMake(0, 0, BROWSER_SCREEN_WIDTH, BROWSER_SCREEN_HEIGHT)];
-    if (self)
-    {
-        _shareList = shareList;
-        _actionList = actionList;
-        _maskView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, BROWSER_SCREEN_WIDTH, BROWSER_SCREEN_HEIGHT)];
-        _maskView.backgroundColor = UIColorFromRGBA(0x000000, 0.55);
-        [self addSubview:_maskView];
-        _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hide)];
-        [self.maskView addGestureRecognizer:_tapGestureRecognizer];
-        self.maskView.alpha = 0;
-
-        UIView *previousView;
-        
-        _contentView = [[UIView alloc] initWithFrame:CGRectMake(0, BROWSER_SCREEN_HEIGHT, BROWSER_SCREEN_WIDTH, CONTENTVIEW_HEIGHT)];
-        _contentView.backgroundColor = CONTENT_BACKGROUND_COLOR;
-        [self addSubview:_contentView];
-
-        if (title.length > 0)
-        {
-            _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, TITLELABEL_ORIGIN_Y, BROWSER_SCREEN_WIDTH, TITLELABEL_HEIGHT)];
-            _titleLabel.backgroundColor = CONTENT_BACKGROUND_COLOR;
-            _titleLabel.textAlignment = NSTextAlignmentCenter;
-            _titleLabel.font = [UIFont systemFontOfSize:11];
-            _titleLabel.textColor = GLOBAL_TITLE_COLOR;
-            _titleLabel.numberOfLines = 0;
-            _titleLabel.text = [NSString stringWithFormat:NSLocalizedString(@"i_wb_label_share_menu_url_source", @"From %@"), title];
-            [self.contentView addSubview:_titleLabel];
-            previousView = _titleLabel;
-        }
-
-        if (_shareList)
-        {
-            UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-            layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-            _shareCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(previousView.frame)+16, BROWSER_SCREEN_WIDTH, SHARECOLLECTIONVIEW_HEIGHT) collectionViewLayout:layout];
-            _shareCollectionView.delegate = self;
-            _shareCollectionView.dataSource = self;
-            _shareCollectionView.alwaysBounceHorizontal = YES;
-            _shareCollectionView.backgroundColor = CONTENT_BACKGROUND_COLOR
-            ;
-            _shareCollectionView.directionalLockEnabled = YES;
-            _shareCollectionView.scrollEnabled = YES;
-            _shareCollectionView.showsHorizontalScrollIndicator = NO;
-            [_shareCollectionView registerClass:[ISWebBrowserShareCollectionViewCell class] forCellWithReuseIdentifier:kWebBrowserShareColectionViewCell];
-            [self.contentView addSubview:_shareCollectionView];
-            previousView = _shareCollectionView;
-        }
-        
-        if (_shareList.count > 0 && _actionList.count > 0)
-        {
-            UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(LEFTSPACE, LINEVIEW_ORIGIN_Y, BROWSER_SCREEN_WIDTH - LEFTSPACE, 1)];
-            lineView.backgroundColor = GLOBAL_LINEVIEW_COLOR;
-            [self.contentView addSubview:lineView];
-            previousView = lineView;
-        }
-
-        if (_actionList.count > 0)
-        {
-            UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-            layout = [[UICollectionViewFlowLayout alloc] init];
-            layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-            _actionCollectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(previousView.frame)+16, BROWSER_SCREEN_WIDTH, ACTIONCOLLECTIONVIEW_HEIGHT) collectionViewLayout:layout];
-            _actionCollectionView.delegate = self;
-            _actionCollectionView.dataSource = self;
-            _actionCollectionView.alwaysBounceHorizontal = YES;
-            _actionCollectionView.backgroundColor = CONTENT_BACKGROUND_COLOR;
-            _actionCollectionView.directionalLockEnabled = YES;
-            _actionCollectionView.scrollEnabled = YES;
-            _actionCollectionView.showsHorizontalScrollIndicator = NO;
-            [_actionCollectionView registerClass:[ISWebBrowserShareCollectionViewCell class] forCellWithReuseIdentifier:kWebBrowserActionColectionViewCell];
-            [self.contentView addSubview:_actionCollectionView];
-            previousView = _actionCollectionView;
-        }
-        
-        _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(previousView.frame)+10, BROWSER_SCREEN_WIDTH, CANCELBUTTON_HEIGHT)];
-        _cancelButton.backgroundColor = CANCELBUTTON_BACKGROUND_COLOR;
-        [_cancelButton setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
-        [_cancelButton setContentVerticalAlignment:UIControlContentVerticalAlignmentCenter];
-        [_cancelButton setTitle:cancelButtonTitle forState:UIControlStateNormal];
-        [_cancelButton setTitleColor:CANCELBUTTON_TITLE_COLOR forState:UIControlStateNormal];
-        _cancelButton.titleLabel.font = [UIFont systemFontOfSize:17];
-        [_cancelButton addTarget:self action:@selector(cancelButtonDidClicked:) forControlEvents:UIControlEventTouchUpInside];
-        [self.contentView addSubview:_cancelButton];
-        
-        self.contentView.frame = CGRectMake(0, BROWSER_SCREEN_HEIGHT, BROWSER_SCREEN_WIDTH, CGRectGetMaxY(_cancelButton.frame));
-    }
-    
-    return self;
-}
 
 #pragma mark - Button Action
-
 - (void)cancelButtonDidClicked:(id)sender
 {
     self.cancelBlock();
+    
     [self hide];
 }
 
@@ -243,18 +362,19 @@ NSString *const kWebBrowserActionColectionViewCell = @"kWebBrowserActionColectio
     ISWebBrowserShareObject *shareObject;
     SEL action;
 
-    if (collectionView == self.shareCollectionView)
-    {
+    if (collectionView == self.shareCollectionView) {
+        
         cellIdentifier = kWebBrowserShareColectionViewCell;
         shareObject = [self.shareList objectAtIndex:indexPath.row];
         action = @selector(shareButtonDidClicked:);
-    }
-    else
-    {
+        
+    } else {
+        
         cellIdentifier = kWebBrowserActionColectionViewCell;
         shareObject = [self.actionList objectAtIndex:indexPath.row];
         action = @selector(actionButtonDidClicked:);
     }
+    
     ISWebBrowserShareCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:cellIdentifier forIndexPath:indexPath];
 
 //    [cell updateWithType:type target:self action:action];
@@ -266,6 +386,7 @@ NSString *const kWebBrowserActionColectionViewCell = @"kWebBrowserActionColectio
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
