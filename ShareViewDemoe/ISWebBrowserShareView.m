@@ -35,7 +35,7 @@
 NSString *const kWebBrowserShareColectionViewCell = @"kWebBrowserShareColectionViewCell";
 NSString *const kWebBrowserActionColectionViewCell = @"kWebBrowserActionColectionViewCell";
 
-@interface ISWebBrowserShareView ()<UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface ISWebBrowserShareView () <UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 
 @end
@@ -295,7 +295,9 @@ NSString *const kWebBrowserActionColectionViewCell = @"kWebBrowserActionColectio
 - (void)show
 {
     [UIView animateWithDuration:0.2 animations:^{
+        
          self.maskView.alpha = 1;
+        
          self.contentView.frame = CGRectMake(0, BROWSER_SCREEN_HEIGHT - self.contentView.frame.size.height, BROWSER_SCREEN_WIDTH, self.contentView.frame.size.height);
      }];
 }
@@ -303,9 +305,13 @@ NSString *const kWebBrowserActionColectionViewCell = @"kWebBrowserActionColectio
 - (void)hide
 {
     [UIView animateWithDuration:0.2 animations:^{
+        
          self.maskView.alpha = 0;
+        
          self.contentView.frame = CGRectMake(0, BROWSER_SCREEN_HEIGHT, BROWSER_SCREEN_WIDTH, BROWSER_SCREEN_HEIGHT);
+        
      } completion:^(BOOL finished) {
+         
          [self removeFromSuperview];
      }];
 }
@@ -313,8 +319,11 @@ NSString *const kWebBrowserActionColectionViewCell = @"kWebBrowserActionColectio
 - (void)shareButtonDidClicked:(id)sender
 {
     [self hide];
+    
     UIButton *button = (UIButton *)sender;
+    
     ISWebBrowserCellType type = button.tag;
+    
 //    ISInfo(@"did click button: %d", type);
     if (self.shareButtonBlock)
     {
@@ -325,11 +334,13 @@ NSString *const kWebBrowserActionColectionViewCell = @"kWebBrowserActionColectio
 - (void)actionButtonDidClicked:(id)sender
 {
     [self hide];
+    
     UIButton *button = (UIButton *)sender;
+    
     ISWebBrowserCellType type = button.tag;
-//    ISInfo(@"did click button: %d", type);
-    if (self.actionButtonBlock)
-    {
+    
+    if (self.actionButtonBlock) {
+        
         self.actionButtonBlock(type);
     }
 }
@@ -345,33 +356,41 @@ NSString *const kWebBrowserActionColectionViewCell = @"kWebBrowserActionColectio
 {
     NSInteger count;
 
-    if (collectionView == self.shareCollectionView)
-    {
+    if (collectionView == self.shareCollectionView) {
+        
         count = self.shareList.count;
     }
-    else
-    {
+    
+    else {
+        
         count = self.actionList.count;
     }
+    
     return count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *cellIdentifier;
+    
     ISWebBrowserShareObject *shareObject;
+    
     SEL action;
 
     if (collectionView == self.shareCollectionView) {
         
         cellIdentifier = kWebBrowserShareColectionViewCell;
+        
         shareObject = [self.shareList objectAtIndex:indexPath.row];
+        
         action = @selector(shareButtonDidClicked:);
         
     } else {
         
         cellIdentifier = kWebBrowserActionColectionViewCell;
+        
         shareObject = [self.actionList objectAtIndex:indexPath.row];
+        
         action = @selector(actionButtonDidClicked:);
     }
     

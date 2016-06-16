@@ -64,6 +64,8 @@
     return self;
 }
 
+
+#pragma mark - update
 - (void) updateWithShareObject:(ISWebBrowserShareObject *) shareObject atIndexPath:(NSIndexPath *) indexPath target:(id) target action:(SEL) action
 {
     self.type = shareObject.type;
@@ -115,7 +117,10 @@
     
     context.minimumScaleFactor = 0.5;
     
-    CGRect rect = [self.titleLabel.text boundingRectWithSize:CGSizeMake(60, 30) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:11] , NSParagraphStyleAttributeName: textStyle} context:context];
+    CGRect rect = [self.titleLabel.text boundingRectWithSize:CGSizeMake(60, 30)
+                                                     options:NSStringDrawingUsesLineFragmentOrigin
+                                                  attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:11] , NSParagraphStyleAttributeName: textStyle}
+                                                     context:context];
     
     self.titleLabel.frame = CGRectMake(self.titleLabel.frame.origin.x, self.titleLabel.frame.origin.y, self.titleLabel.frame.size.width, ceil(rect.size.height));
 }
@@ -165,21 +170,8 @@
     self.titleLabel.frame = CGRectMake(5, CGRectGetMaxY(self.button.frame) + 9, self.frame.size.width - 10, ceil(rect.size.height));
 }
 
-//- (void) updateWithType:(ISWebBrowserCellType) type target:(id) target action:(SEL) action
-//{
-//    self.type = type;
-//    UIImage *icon = [self iconOfType:type];
-//    [self.button setBackgroundImage:icon forState:UIControlStateNormal];
-//    [self.button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
-//    [self.button setTag:type];
-//    self.titleLabel.text = [self titleOfType:type];
-//    NSMutableParagraphStyle *textStyle = [[NSMutableParagraphStyle defaultParagraphStyle] mutableCopy];
-//    textStyle.lineBreakMode = NSLineBreakByCharWrapping;
-//    NSStringDrawingContext *context = [[NSStringDrawingContext alloc] init];
-//    context.minimumScaleFactor = 0.5;
-//    CGRect rect = [self.titleLabel.text boundingRectWithSize:CGSizeMake(60, 30) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName: [UIFont systemFontOfSize:11] , NSParagraphStyleAttributeName: textStyle} context:context];
-//    self.titleLabel.frame = CGRectMake(self.titleLabel.frame.origin.x, self.titleLabel.frame.origin.y, self.titleLabel.frame.size.width, rect.size.height);
-//}
+
+#pragma mark - type
 
 - (UIImage *)iconOfType:(ISWebBrowserCellType)type
 {
