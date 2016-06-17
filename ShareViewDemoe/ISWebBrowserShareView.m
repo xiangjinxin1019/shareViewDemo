@@ -208,24 +208,9 @@ NSString *const kWebBrowserActionColectionViewCell = @"kWebBrowserActionColectio
                 
                 ISWebBrowserCellType shareType = shareObject.type;
             
-                switch (shareType)
-                {
-                    case ISWebBrowserCellTypeWXSceneTimeline :
-                        NSLog(@"WX be showed");
-                        break;
-                    case ISWebBrowserCellTypeQQ :
-                        NSLog(@"QQ be showed");
-                        break;
-                    case ISWebBrowserCellTypeEmail :
-                        NSLog(@"Email be showed");
-                        break;
-                    case ISWebBrowserCellTypeCopyUrl :
-                        NSLog(@"Url be showed");
-                        break;
-                    default :
-                        break;
-                }
-
+               // 判断类型
+            [self switchISWebBrowserCellTypeWithType:shareType];
+            
         }
         
         _actionList = actionList;
@@ -349,18 +334,9 @@ NSString *const kWebBrowserActionColectionViewCell = @"kWebBrowserActionColectio
      }];
 }
 
-- (void)shareButtonDidClicked:(id)sender
+
+-(void)switchISWebBrowserCellTypeWithType:(ISWebBrowserCellType)type
 {
-    [self hide];
-    
-    UIButton *button = (UIButton *)sender;
-    
-    ISWebBrowserCellType type = button.tag;
-    
-//    NSLog(@"did click button: %lu", (unsigned long)type);
-    
-    
-    // shareButton被点击时候，判断类型
     switch (type)
     {
         case ISWebBrowserCellTypeWXSceneTimeline :
@@ -375,10 +351,28 @@ NSString *const kWebBrowserActionColectionViewCell = @"kWebBrowserActionColectio
         case ISWebBrowserCellTypeCopyUrl :
             NSLog(@"Url be clicked");
             break;
+        case  ISWebBrowserCellTypeSinaWeibo:
+            NSLog(@"Sina be clicked");
+            break;
         default :
             break;
     }
 
+}
+
+- (void)shareButtonDidClicked:(id)sender
+{
+    [self hide];
+    
+    UIButton *button = (UIButton *)sender;
+    
+    ISWebBrowserCellType type = button.tag;
+    
+//    NSLog(@"did click button: %lu", (unsigned long)type);
+    
+    
+    // shareButton被点击时候，判断类型
+    [self switchISWebBrowserCellTypeWithType:type];
     
     if (self.shareButtonBlock) {
         

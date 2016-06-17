@@ -38,6 +38,10 @@
     ISWebBrowserShareObject *qqShareObject = [[ISWebBrowserShareObject alloc] initWithType:ISWebBrowserCellTypeQQ];
     [shareList addObject:qqShareObject];
     
+    // 微博
+    ISWebBrowserShareObject *weiboShareObject = [[ISWebBrowserShareObject alloc] initWithType:ISWebBrowserCellTypeSinaWeibo];
+    [shareList addObject:weiboShareObject];
+    
     // 邮件
     ISWebBrowserShareObject *emailShareObject = [[ISWebBrowserShareObject alloc] initWithType:ISWebBrowserCellTypeEmail];
     
