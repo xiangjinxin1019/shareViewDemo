@@ -45,7 +45,7 @@
     ISWebBrowserShareObject *copyURLObject = [[ISWebBrowserShareObject alloc] initWithType:ISWebBrowserCellTypeCopyUrl];
     [shareList addObjectsFromArray:@[emailShareObject, copyURLObject]];
     
-//    // 分享View
+    // 分享View
 //    ISWebBrowserShareView *shareView = [[ISWebBrowserShareView alloc] initWithTitle:nil
 //                                                                  cancelButtonTitle:NSLocalizedString(@"i_wb_label_share_menu_cancel", @"Cancel") cancelBlock:NULL
 //                                                                          shareList:shareList

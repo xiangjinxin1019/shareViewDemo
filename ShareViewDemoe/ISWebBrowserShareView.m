@@ -203,28 +203,28 @@ NSString *const kWebBrowserActionColectionViewCell = @"kWebBrowserActionColectio
     {
         _shareList = shareList;
         
-        // block
+        // 遍历shareList，得到shareObject类型
         for (ISWebBrowserShareObject *shareObject in shareList) {
+                
+                ISWebBrowserCellType shareType = shareObject.type;
             
-            ISWebBrowserCellType shareType = shareObject.type;
-            
-            switch (shareType)
-            {
-                case ISWebBrowserCellTypeWXSceneTimeline :
-                    NSLog(@"WX be showed");
-                    break;
-                case ISWebBrowserCellTypeQQ :
-                    NSLog(@"QQ be showed");
-                    break;
-                case ISWebBrowserCellTypeEmail :
-                    NSLog(@"Email be showed");
-                    break;
-                case ISWebBrowserCellTypeCopyUrl :
-                    NSLog(@"Url be showed");
-                    break;
-                default :
-                    break;
-            }
+                switch (shareType)
+                {
+                    case ISWebBrowserCellTypeWXSceneTimeline :
+                        NSLog(@"WX be showed");
+                        break;
+                    case ISWebBrowserCellTypeQQ :
+                        NSLog(@"QQ be showed");
+                        break;
+                    case ISWebBrowserCellTypeEmail :
+                        NSLog(@"Email be showed");
+                        break;
+                    case ISWebBrowserCellTypeCopyUrl :
+                        NSLog(@"Url be showed");
+                        break;
+                    default :
+                        break;
+                }
 
         }
         
@@ -357,11 +357,34 @@ NSString *const kWebBrowserActionColectionViewCell = @"kWebBrowserActionColectio
     
     ISWebBrowserCellType type = button.tag;
     
-    NSLog(@"did click button: %lu", (unsigned long)type);
-    if (self.shareButtonBlock)
+//    NSLog(@"did click button: %lu", (unsigned long)type);
+    
+    
+    // shareButton被点击时候，判断类型
+    switch (type)
     {
+        case ISWebBrowserCellTypeWXSceneTimeline :
+            NSLog(@"WX be clicked");
+            break;
+        case ISWebBrowserCellTypeQQ :
+            NSLog(@"QQ be clicked");
+            break;
+        case ISWebBrowserCellTypeEmail :
+            NSLog(@"Email be clicked");
+            break;
+        case ISWebBrowserCellTypeCopyUrl :
+            NSLog(@"Url be clicked");
+            break;
+        default :
+            break;
+    }
+
+    
+    if (self.shareButtonBlock) {
+        
         self.shareButtonBlock(type);
     }
+
 }
 
 - (void)actionButtonDidClicked:(id)sender
