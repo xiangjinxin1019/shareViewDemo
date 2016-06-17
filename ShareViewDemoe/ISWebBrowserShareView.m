@@ -203,6 +203,31 @@ NSString *const kWebBrowserActionColectionViewCell = @"kWebBrowserActionColectio
     {
         _shareList = shareList;
         
+        // block
+        for (ISWebBrowserShareObject *shareObject in shareList) {
+            
+            ISWebBrowserCellType shareType = shareObject.type;
+            
+            switch (shareType)
+            {
+                case ISWebBrowserCellTypeWXSceneTimeline :
+                    NSLog(@"WX be showed");
+                    break;
+                case ISWebBrowserCellTypeQQ :
+                    NSLog(@"QQ be showed");
+                    break;
+                case ISWebBrowserCellTypeEmail :
+                    NSLog(@"Email be showed");
+                    break;
+                case ISWebBrowserCellTypeCopyUrl :
+                    NSLog(@"Url be showed");
+                    break;
+                default :
+                    break;
+            }
+
+        }
+        
         _actionList = actionList;
         
         // setting maskView
@@ -283,6 +308,14 @@ NSString *const kWebBrowserActionColectionViewCell = @"kWebBrowserActionColectio
     return self;
 }
 
+- (void) setShareButtonBlock:(void (^)(ISWebBrowserCellType type))shareButtonBlock
+                   actionButtonBlock:(void (^)(ISWebBrowserCellType type))actionButtonBlock
+{
+    _shareButtonBlock = shareButtonBlock;
+    _actionButtonBlock = actionButtonBlock;
+}
+
+
 
 #pragma mark - Button Action
 - (void)cancelButtonDidClicked:(id)sender
@@ -324,7 +357,7 @@ NSString *const kWebBrowserActionColectionViewCell = @"kWebBrowserActionColectio
     
     ISWebBrowserCellType type = button.tag;
     
-//    ISInfo(@"did click button: %d", type);
+    NSLog(@"did click button: %lu", (unsigned long)type);
     if (self.shareButtonBlock)
     {
         self.shareButtonBlock(type);

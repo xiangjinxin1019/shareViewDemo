@@ -48,6 +48,11 @@ extern NSString *const kWebBrowserActionColectionViewCell;
                    actionList:(NSArray *)actionList
             actionButtonBlock:(void (^)(ISWebBrowserCellType type))actionButtonBlock;
 
+
+- (void) setShareButtonBlock:(void (^)(ISWebBrowserCellType type))shareButtonBlock
+                   actionButtonBlock:(void (^)(ISWebBrowserCellType type))actionButtonBlock;
+
+
 - (void)show;
 
 - (void)hide;

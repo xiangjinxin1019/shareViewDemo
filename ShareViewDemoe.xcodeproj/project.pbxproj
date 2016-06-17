@@ -330,6 +330,7 @@
 				B9F52BD81D12315D008F58B4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

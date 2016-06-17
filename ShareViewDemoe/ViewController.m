@@ -45,32 +45,40 @@
     ISWebBrowserShareObject *copyURLObject = [[ISWebBrowserShareObject alloc] initWithType:ISWebBrowserCellTypeCopyUrl];
     [shareList addObjectsFromArray:@[emailShareObject, copyURLObject]];
     
-    // 分享View
+//    // 分享View
+//    ISWebBrowserShareView *shareView = [[ISWebBrowserShareView alloc] initWithTitle:nil
+//                                                                  cancelButtonTitle:NSLocalizedString(@"i_wb_label_share_menu_cancel", @"Cancel") cancelBlock:NULL
+//                                                                          shareList:shareList
+//                                                                   shareButtonBlock:^(ISWebBrowserCellType type)
+//                                        {
+//                                            switch (type)
+//                                            {
+//                                                case ISWebBrowserCellTypeWXSceneTimeline :
+////                                                    [self sendToWXSceneTimeline];
+//                                                    break;
+//                                                case ISWebBrowserCellTypeQQ :
+////                                                    [self sendToQQ];
+//                                                    break;
+//                                                case ISWebBrowserCellTypeEmail :
+////                                                    [self emailAction:nil];
+//                                                    break;
+//                                                case ISWebBrowserCellTypeCopyUrl :
+////                                                    [self copyMyCardShareURL];
+//                                                    break;
+//                                                default :
+//                                                    break;
+//                                            }
+//                                        }
+//                                                                         actionList:shareList
+//                                                                  actionButtonBlock:nil];
+    
     ISWebBrowserShareView *shareView = [[ISWebBrowserShareView alloc] initWithTitle:nil
-                                                                  cancelButtonTitle:NSLocalizedString(@"i_wb_label_share_menu_cancel", @"Cancel") cancelBlock:NULL
+                                                                  cancelButtonTitle:NSLocalizedString(@"i_wb_label_share_menu_cancel", @"Cancel")
                                                                           shareList:shareList
-                                                                   shareButtonBlock:^(ISWebBrowserCellType type)
-                                        {
-                                            switch (type)
-                                            {
-                                                case ISWebBrowserCellTypeWXSceneTimeline :
-//                                                    [self sendToWXSceneTimeline];
-                                                    break;
-                                                case ISWebBrowserCellTypeQQ :
-//                                                    [self sendToQQ];
-                                                    break;
-                                                case ISWebBrowserCellTypeEmail :
-//                                                    [self emailAction:nil];
-                                                    break;
-                                                case ISWebBrowserCellTypeCopyUrl :
-//                                                    [self copyMyCardShareURL];
-                                                    break;
-                                                default :
-                                                    break;
-                                            }
-                                        }
-                                                                         actionList:shareList
-                                                                  actionButtonBlock:nil];
+                                                                         actionList:shareList];
+    
+    
+
     
     [self.view.window addSubview:shareView];
     
